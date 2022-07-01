@@ -36,3 +36,126 @@
     transform: rotate(360deg);
   }
 }
+
+/* Sidebar.js */
+.container{
+  min-height: 100%;
+  min-width: 100%;
+}
+
+.background{
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+}
+
+.logo{
+  height: 250px;
+  width: 250px;
+}
+
+.link, link:focus, link:hover, link:visited, link:link,link:active{
+  text-decoration : none;
+}
+
+.list{
+  min-width : 100%;
+}
+
+.listItemText{
+  font-weight: bolder;
+  color: rgb(120, 120, 120);
+}
+
+.drawer-button{
+  color: rgb(120, 120, 120);
+}
+
+.logo-drawer{
+  height:150px;
+  width:150px;
+}
+
+
+/* ************** */
+
+/* Home.js */
+.title{
+  color: rgb(120, 120, 120);
+  font-weight: bolder;
+}
+
+.components-background{
+  background-color: rgb(244, 244, 246);
+  width: 100%;
+  height: 100vh;
+}
+
+/* ************** */
+
+/* Overview.js */
+.count{
+  color: #2e7d32;
+  font-weight: bolder;
+}
+
+.phrase{
+  color: rgb(132,133,140);
+  font-size: 10px;
+}
+/* ************** */
+
+/* ProductList.js*/
+.product-list-title{
+  color: rgb(132,133,140);
+  font-weight: bolder;
+  padding: 10px;
+}
+/* ************** */
+
+/* ProductListItem.js */
+.product-item-title{
+  color: rgb(120, 120, 120);
+}
+
+.product-item-value-box{
+  border-radius: 10px;
+  background-color: rgb(55,128,156);
+  padding: 2px;
+}
+
+.product-item-value{
+  font-weight: bolder;
+  color: rgb(255, 255, 255);
+}
+/* **************.js */
+
+/* Infos.js */
+
+/* ******** */
+/* UpcomingCFT.js */
+
+/* ************** */
+
+/* UpcomingCFTItem.js */
+.colored-divider{
+  background-color: rgb(55,128,156);
+  width: 2px;
+}
+/* ************** */
+
+/* CreateCFT.js */
+.form-title{
+  font-weight: bolder;
+  color: #2e7d32;
+}
+
+.label{
+  color: rgb(120, 120, 120);
+}
+/* ************ */
+
+/* CFTItem.js */
+.cftItem-text{
+  color: rgb(120, 120, 120);
+}
+/* *********** */

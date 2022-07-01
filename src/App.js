@@ -1,25 +1,15 @@
-import logo from './logo.svg';
+import React from 'react';
+// @MUI
+import {Grid} from '@mui/material';
+// components
+import Sidebar from './components/Sidebar/Sidebar';
+// style
 import './App.css';
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Grid className="minHeight">
+        <Sidebar />
+    </Grid>
   );
 }
-
-export default App;
