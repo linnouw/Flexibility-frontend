@@ -2,6 +2,7 @@ import React from 'react';
 // @MUI
 import {Grid, Button, Typography, Paper, TextField, MenuItem, Select, FormControl, InputLabel, InputAdornment} from '@mui/material';
 import PublishIcon from '@mui/icons-material/Publish';
+import {Link} from 'react-router-dom';
 // style
 import '../../App.css';
 
@@ -66,10 +67,12 @@ export default function CreateCFT() {
                         </Grid>
                     </Grid>
                     <Grid p={1} item container direction="column" justifyContent="center" alignItems="center">
-                        <Button variant="contained">
-                            <PublishIcon/>
-                            Open
-                        </Button>
+                        <Link className="link" to="/cftList">
+                            <Button variant="contained">
+                                <PublishIcon/>
+                                Open
+                            </Button>
+                        </Link>
                     </Grid>
                 </Grid>
             </Grid>

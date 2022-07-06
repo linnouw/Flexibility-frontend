@@ -2,18 +2,29 @@ import React from 'react';
 // @MUI
 import {Grid, Button, Typography, Paper, TextField, MenuItem, Select, FormControl, InputLabel, InputAdornment} from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {Link} from 'react-router-dom';
 // style
 import '../../App.css';
 
 export default function CreateCFT() {
   return (
-    <Grid container direction="row" justifyContent="center" alignItems="center" className="components-background" p={1}>
+    <Grid container direction="column" justifyContent="flex-start" alignItems="center" className="components-background">
+    <Grid item m={1} container direction="column" justifyContent="flex-start" alignItems="flex-start">
+        <Link className="link" to="/cftList">
+        <Button variant="text">
+            <ArrowBackIcon/>
+            Back to CFT list
+        </Button>
+        </Link>      
+    </Grid>
+        
         <Paper elevation={0} style={{borderRadius: 10, padding: 10}}>
             <Grid container
             direction="column"
             justifyContent="center"
             alignItems="center">
-                <Grid item p={1}>
+                <Grid item p={1}>  
                     <Typography variant="h6" className="form-title">Submit a bid</Typography>
                 </Grid>
                 <Grid item container
@@ -71,11 +82,13 @@ export default function CreateCFT() {
                     </Grid>
                 </Grid>
                 <Grid p={1} item container direction="column" justifyContent="center" alignItems="center">
+                    <Link className="link" to="/cftList">
                         <Button variant="contained">
                             <SaveIcon/>
                             Submit
                         </Button>
-                    </Grid>
+                    </Link>
+                </Grid>
             </Grid>
         </Paper>
     </Grid>

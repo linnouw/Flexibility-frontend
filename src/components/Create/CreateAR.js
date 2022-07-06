@@ -75,10 +75,12 @@ export default function CFTItem() {
                 </Grid>
             </Grid>
             <Grid p={1} item container direction="column" justifyContent="center" alignItems="center">
-                    <Button variant="contained">
-                        <SaveIcon/>
-                        Submit
-                    </Button>
+                    <Link className="link" to="/cftList">
+                        <Button variant="contained">
+                            <SaveIcon/>
+                            Submit
+                        </Button>
+                    </Link>
                 </Grid>
         </Grid>
     </Paper>

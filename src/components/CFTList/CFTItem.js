@@ -37,6 +37,9 @@ export default function CFTItem() {
         <Link className="link" to="/createAR">
             <Button size="small">Submit AR</Button>
         </Link>
+        <Link className="link" to="/createBid">
+            <Button size="small">Submit Bid</Button>
+        </Link>
         <Link className="link" to="/ARL">
             <Button size="small">View AR list</Button>
         </Link>

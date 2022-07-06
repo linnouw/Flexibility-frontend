@@ -67,11 +67,6 @@ export default function Sidebar() {
                               CFT
                               </Button>
                          </Link>
-                         <Link className="link" to="/createBid">
-                         <Button variant="contained" color="success" startIcon={<AddCircleIcon />}>
-                              Bid
-                         </Button>
-                         </Link>
                     </Stack>
                     <List className="list" component="nav" aria-label="mailbox folders">
                          <Link className="link" to="/cftList">
