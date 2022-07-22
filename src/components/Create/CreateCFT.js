@@ -18,20 +18,35 @@ import { Link } from "react-router-dom";
 import "../../App.css";
 //web3
 import Web3 from "web3/dist/web3.min.js";
-//import FlexibilityList_contract from "../../abi/FlexibilityList.json";
-//import { useWeb3React } from "@web3-react/core";
-//import { injected } from "../../wallet/Connect";
+import { useWeb3React } from "@web3-react/core";
+import { injected } from "../../wallet/Connect";
+import FlexibilityList_contract from "../../abi/FlexibilityList.json";
+//useContext
+import Web3Context from "../../Web3Context";
 
 export default function CreateCFT() {
-  const [owner, setOwner] = React.useState(null);
+  const context = React.useContext(Web3Context);
+  const { active, account, library, activate, deactivate } = useWeb3React();
+  const { projectUrl, productsAddresses } = context;
   const [product, setProduct] = React.useState(null);
   const [powerNeeded, setPowerNeeded] = React.useState(null);
   const [openingDate, setOpeningDate] = React.useState(null);
   const [closingDate, setClosingDate] = React.useState(null);
   const [localization, setLocalization] = React.useState(null);
+  const [value, setValue] = React.useState("");
+
+  async function connect() {
+    try {
+      await activate(injected);
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
 
   const handleChange = (e) => {
-    setProduct(e.target.value);
+    setValue(e.target.value);
+    if (value === "mFRR") setProduct(productsAddresses[0]);
+    else setProduct(productsAddresses[1]);
   };
 
   const epoch = (date) => {
@@ -48,8 +63,8 @@ export default function CreateCFT() {
     );
 
     const gas = await FlexibilityList.methods
-      .createProduct(
-        owner,
+      .createCFT(
+        account,
         product,
         powerNeeded,
         openingDate,
@@ -60,9 +75,9 @@ export default function CreateCFT() {
 
     const gasPrice = await web3.eth.getGasPrice();
 
-    const tx = await AuctionListContract.methods
+    const tx = await FlexibilityList.methods
       .createCFT(
-        owner,
+        account,
         product,
         powerNeeded,
         openingDate,
@@ -94,115 +109,136 @@ export default function CreateCFT() {
               Open a call for tenders
             </Typography>
           </Grid>
-          <Grid
-            item
-            container
-            direction="row"
-            justifyContent="space-around"
-            alignItems="center"
-          >
-            <Grid
-              item
-              xs={12}
-              md={6}
-              p={1}
-              container
-              direction="column"
-              justifyContent="center"
-              alignItems={{ md: "flex-end", xs: "flex-start" }}
-            >
-              <Grid item p={1}>
-                <Typography className="label">Owner:</Typography>
-                <TextField
-                  type="text"
-                  sx={{ m: 1, minWidth: 250 }}
-                  onChange={(e) => setOwner(e.target.value)}
-                />
-              </Grid>
-              <Grid item p={1}>
-                <Typography className="label">Product:</Typography>
-                <FormControl sx={{ m: 1, minWidth: 250 }} size="small">
-                  <Select
-                    labelId="demo-select-small"
-                    id="demo-select-small"
-                    label="product"
-                    value={product}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={"mFRR"}>mFRR</MenuItem>
-                    <MenuItem value={"aFRR"}>aFRR</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item p={1}>
-                <Typography className="label">Total power needed:</Typography>
-                <TextField
-                  type="text"
-                  sx={{ m: 1, minWidth: 250 }}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">MW</InputAdornment>
-                    ),
-                  }}
-                  onChange={(e) => setPowerNeeded(parseInt(e.target.value))}
-                />
-              </Grid>
-            </Grid>
+          {active ? (
             <Grid
               item
               container
-              xs={12}
-              md={6}
-              p={1}
-              direction="column"
-              justifyContent="center"
-              alignItems="flex-start"
-            >
-              <Grid item p={1}>
-                <Typography className="label">Opening date:</Typography>
-                <TextField
-                  type="date"
-                  sx={{ m: 1, minWidth: 250 }}
-                  onChange={(e) => setOpeningDate(epoch(e.target.value))}
-                />
-              </Grid>
-              <Grid item p={1}>
-                <Typography className="label">Closing date:</Typography>
-                <TextField
-                  type="date"
-                  sx={{ m: 1, minWidth: 250 }}
-                  onChange={(e) => setClosingDate(epoch(e.target.value))}
-                />
-              </Grid>
-              <Grid item p={1}>
-                <Typography className="label">Localization Factor:</Typography>
-                <TextField
-                  type="text"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">Zone:</InputAdornment>
-                    ),
-                  }}
-                  onChange={(e) => setLocalization(e.target.value)}
-                />
-              </Grid>
-            </Grid>
-            <Grid
-              p={1}
-              item
-              container
-              direction="column"
-              justifyContent="center"
+              direction="row"
+              justifyContent="space-around"
               alignItems="center"
             >
-              <Link className="link" to="/cftList">
-                <Button variant="contained" onClick={handleSubmit}>
-                  <PublishIcon />
-                  Open
-                </Button>
-              </Link>
+              <Grid
+                item
+                xs={12}
+                md={6}
+                p={1}
+                container
+                direction="column"
+                justifyContent="center"
+                alignItems={{ md: "flex-end", xs: "flex-start" }}
+              >
+                <Grid item p={1}>
+                  <Typography className="label">Owner:</Typography>
+                  <TextField
+                    type="text"
+                    sx={{ m: 1, minWidth: 250 }}
+                    value={account}
+                    disabled
+                  />
+                </Grid>
+                <Grid item p={1}>
+                  <Typography className="label">Product:</Typography>
+                  <FormControl sx={{ m: 1, minWidth: 250 }} size="small">
+                    <Select
+                      labelId="demo-select-small"
+                      id="demo-select-small"
+                      label="product"
+                      value={value}
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={"mFRR"}>mFRR</MenuItem>
+                      <MenuItem value={"aFRR"}>aFRR</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item p={1}>
+                  <Typography className="label">Total power needed:</Typography>
+                  <TextField
+                    type="text"
+                    sx={{ m: 1, minWidth: 250 }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">MW</InputAdornment>
+                      ),
+                    }}
+                    onChange={(e) => setPowerNeeded(parseInt(e.target.value))}
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                item
+                container
+                xs={12}
+                md={6}
+                p={1}
+                direction="column"
+                justifyContent="center"
+                alignItems="flex-start"
+              >
+                <Grid item p={1}>
+                  <Typography className="label">Opening date:</Typography>
+                  <TextField
+                    type="date"
+                    sx={{ m: 1, minWidth: 200 }}
+                    onChange={(e) =>
+                      setOpeningDate(epoch(parseInt(e.target.value)))
+                    }
+                  />
+                  <TextField type="time" sx={{ m: 1, minWidth: 50 }} />
+                </Grid>
+                <Grid item p={1}>
+                  <Typography className="label">Closing date:</Typography>
+                  <TextField
+                    type="date"
+                    sx={{ m: 1, minWidth: 200 }}
+                    onChange={(e) =>
+                      setClosingDate(epoch(parseInt(e.target.value)))
+                    }
+                  />
+                  <TextField type="time" sx={{ m: 1, minWidth: 50 }} />
+                </Grid>
+                <Grid item p={1}>
+                  <Typography className="label">
+                    Localization Factor:
+                  </Typography>
+                  <TextField
+                    type="text"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">Zone:</InputAdornment>
+                      ),
+                    }}
+                    onChange={(e) => setLocalization(e.target.value)}
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                p={1}
+                item
+                container
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Link className="link" to="/cftList">
+                  <Button variant="contained" onClick={handleSubmit}>
+                    <PublishIcon />
+                    Open
+                  </Button>
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
+          ) : (
+            <Grid
+              item
+              container
+              direction="row"
+              justifyContent="space-around"
+              alignItems="center"
+            >
+              <Button onClick={connect}>Connect</Button>
+            </Grid>
+          )}
         </Grid>
       </Paper>
     </Grid>

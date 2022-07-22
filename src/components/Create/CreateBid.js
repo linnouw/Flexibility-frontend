@@ -22,13 +22,17 @@ import Web3 from "web3/dist/web3.min.js";
 //import CFT_contract from "../../abi/FlexibilityList.json";
 //import { useWeb3React } from "@web3-react/core";
 //import { injected } from "../../wallet/Connect";
+//useContext
+import Web3Context from "../../Web3Context";
 
 export default function CreateBid() {
+  const context = React.useContext(Web3Context);
+  const { projectUrl } = context;
   const [owner, setOwner] = React.useState(null);
   const [serviceProvider, setServiceProvider] = React.useState(null);
   const [price, setPrice] = React.useState(null);
   const [quantity, setQuantity] = React.useState(null);
-  const [localization, setLocalization] = React.useState(null);
+  const [localization, setLocalization] = React.useState("");
   const [startOfDelivery, setStartOfDelivery] = React.useState(null);
 
   const epoch = (date) => {
