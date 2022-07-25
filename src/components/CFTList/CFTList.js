@@ -5,8 +5,13 @@ import CFTItem from './CFTItem';
 import {Grid, Typography} from '@mui/material';
 // style
 import '../../App.css';
+//useContext
+import Web3Context from "../../Web3Context";
 
 export default function CFTList() {
+  const context = React.useContext(Web3Context);
+  const { cftsAddresses } = context;
+
   return (
     <Grid container
         direction="column"
@@ -17,12 +22,12 @@ export default function CFTList() {
             <Typography variant="h5" className="title">List of current CFTs</Typography>
         </Grid>
         <Grid item container m={1}>
-            <Grid item  m={1}>
-                <CFTItem />
-            </Grid>
-            <Grid item  m={1}>
-                <CFTItem />
-            </Grid>
+            {cftsAddresses &&
+            cftsAddresses.map((address, index) => ( 
+                <Grid item  m={1} key={index}>
+                    <CFTItem address={address}/>
+                </Grid>
+            ))}
         </Grid>
     </Grid>
   );

@@ -11,7 +11,7 @@ import Web3Context from "../../Web3Context";
 
 export default function UpcomingCFTItem(address) {
   const context = React.useContext(Web3Context);
-  const { projectUrl, productsAddresses } = context;
+  const { projectUrl } = context;
   const [cftDetails, setCftDetails] = React.useState([]);
 
   React.useEffect(() => {
@@ -35,19 +35,19 @@ export default function UpcomingCFTItem(address) {
 
   const millisToMinutesAndSeconds = (milliseconds) => {
     //Get hours from milliseconds
-    var hours = milliseconds / (1000*60*60);
-    var absoluteHours = Math.floor(hours);
-    var h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
+    let hours = milliseconds / (1000*60*60);
+    let absoluteHours = Math.floor(hours);
+    let h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
 
     //Get remainder from hours and convert to minutes
-    var minutes = (hours - absoluteHours) * 60;
-    var absoluteMinutes = Math.floor(minutes);
-    var m = absoluteMinutes > 9 ? absoluteMinutes : '0' +  absoluteMinutes;
+    let minutes = (hours - absoluteHours) * 60;
+    let absoluteMinutes = Math.floor(minutes);
+    let m = absoluteMinutes > 9 ? absoluteMinutes : '0' +  absoluteMinutes;
 
     //Get remainder from minutes and convert to seconds
-    var seconds = (minutes - absoluteMinutes) * 60;
-    var absoluteSeconds = Math.floor(seconds);
-    var s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
+    let seconds = (minutes - absoluteMinutes) * 60;
+    let absoluteSeconds = Math.floor(seconds);
+    let s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
 
 
     return h + ':' + m + ':' + s;
@@ -68,7 +68,7 @@ export default function UpcomingCFTItem(address) {
             <Typography className="product-item-title" noWrap>{convert_Milliseconds_to_date(parseInt(cftDetails[3]))}</Typography>
             </Grid>
             <Grid item>
-            <Typography className="product-item-title" noWrap></Typography>
+            <Typography className="product-item-title" noWrap>product</Typography>
             </Grid>
        </Grid>
        <Grid xs={12} md={6} item container direction="column"
@@ -76,7 +76,7 @@ export default function UpcomingCFTItem(address) {
             alignItems="flex-start"
             p={2}>
             <Grid item>
-                <Typography className="product-item-title" noWrap>Total power : {cftDetails[2]}</Typography>
+                <Typography className="product-item-title" noWrap>Total power : {cftDetails[2]} MW</Typography>
             </Grid>
             <Grid item>
                 <Typography className="product-item-title">Duration : {millisToMinutesAndSeconds(parseInt(cftDetails[4]) - parseInt(cftDetails[3]))}</Typography>

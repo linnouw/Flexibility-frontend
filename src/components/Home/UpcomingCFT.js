@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 // component
 import UpcomingCFTItem from './UpcomingCFTItem';
 // @MUI
