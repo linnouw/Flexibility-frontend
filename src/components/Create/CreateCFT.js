@@ -13,7 +13,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import PublishIcon from "@mui/icons-material/Publish";
-import { Link, NavigationType, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // style
 import "../../App.css";
 //web3
@@ -188,7 +188,7 @@ export default function CreateCFT() {
                     type="date"
                     sx={{ m: 1, minWidth: 200 }}
                     onChange={(e) =>
-                      setOpeningDate(epoch(parseInt(e.target.value)))
+                      setOpeningDate(epoch(e.target.value))
                     }
                   />
                   <TextField type="time" sx={{ m: 1, minWidth: 50 }} />
@@ -199,7 +199,7 @@ export default function CreateCFT() {
                     type="date"
                     sx={{ m: 1, minWidth: 200 }}
                     onChange={(e) =>
-                      setClosingDate(epoch(parseInt(e.target.value)))
+                      setClosingDate(epoch(e.target.value))
                     }
                   />
                   <TextField type="time" sx={{ m: 1, minWidth: 50 }} />

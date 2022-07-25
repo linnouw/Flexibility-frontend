@@ -7,15 +7,14 @@ import TimelapseIcon from '@mui/icons-material/Timelapse';
 import '../../App.css';
 
 export default function Overview() {
-  const [deliveryPeriod, setDeliveryPeriod] = React.useState(null);
+  const [deliveryPeriod, setDeliveryPeriod] = React.useState();
 
-  /*React.useEffect(()=>{
-    const currentDate = new Date();
-    const currentTime = currentDate.getMinutes();
-    console.log(currentDate);
+  const currentDate = new Date();
+  const currentTime = parseInt(currentDate.getMinutes());
+  React.useEffect(()=>{   
     if(currentTime % 5 === 0)
         setDeliveryPeriod(currentDate);
-  }, [deliveryPeriod]);*/
+  }, [currentTime]);
 
   return (
     <Grid container
@@ -39,6 +38,7 @@ export default function Overview() {
                         </Grid>
                         <Grid item>
                             <Typography variant="h6" className="count">{deliveryPeriod}</Typography>
+                            
                         </Grid>
                     </Grid>
                 </Stack>

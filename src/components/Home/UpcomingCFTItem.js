@@ -14,11 +14,6 @@ export default function UpcomingCFTItem(address) {
   const { projectUrl, productsAddresses } = context;
   const [cftDetails, setCftDetails] = React.useState([]);
 
-  const convert = (epoch_time) => {
-    const date = new Date(epoch_time*1000);
-    return date.toLocaleString();
-  }
-
   React.useEffect(() => {
     load();
   }, [cftDetails]);
@@ -31,6 +26,34 @@ export default function UpcomingCFTItem(address) {
     setCftDetails(Object.values(cft_details));
   }
 
+  const convert_Milliseconds_to_date = (time) => {
+   
+    const date = new Date(time);
+    return (date.toLocaleString());
+
+  }
+
+  const millisToMinutesAndSeconds = (milliseconds) => {
+    //Get hours from milliseconds
+    var hours = milliseconds / (1000*60*60);
+    var absoluteHours = Math.floor(hours);
+    var h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
+
+    //Get remainder from hours and convert to minutes
+    var minutes = (hours - absoluteHours) * 60;
+    var absoluteMinutes = Math.floor(minutes);
+    var m = absoluteMinutes > 9 ? absoluteMinutes : '0' +  absoluteMinutes;
+
+    //Get remainder from minutes and convert to seconds
+    var seconds = (minutes - absoluteMinutes) * 60;
+    var absoluteSeconds = Math.floor(seconds);
+    var s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
+
+
+    return h + ':' + m + ':' + s;
+}
+  
+
   return (
     <Stack
     direction="row"
@@ -42,7 +65,7 @@ export default function UpcomingCFTItem(address) {
             alignItems="flex-end"
             p={2}>
             <Grid item>
-                <Typography className="product-item-title" noWrap>{convert(cftDetails[3])}</Typography>
+            <Typography className="product-item-title" noWrap>{convert_Milliseconds_to_date(parseInt(cftDetails[3]))}</Typography>
             </Grid>
             <Grid item>
             <Typography className="product-item-title" noWrap></Typography>
@@ -56,7 +79,7 @@ export default function UpcomingCFTItem(address) {
                 <Typography className="product-item-title" noWrap>Total power : {cftDetails[2]}</Typography>
             </Grid>
             <Grid item>
-                <Typography className="product-item-title">Duration : {cftDetails[4] - cftDetails[3]}</Typography>
+                <Typography className="product-item-title">Duration : {millisToMinutesAndSeconds(parseInt(cftDetails[4]) - parseInt(cftDetails[3]))}</Typography>
             </Grid>
             <Grid item>
                 <Typography className="product-item-title" noWrap>Localization : {cftDetails[5]}</Typography>
