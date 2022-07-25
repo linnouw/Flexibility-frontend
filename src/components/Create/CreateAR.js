@@ -21,22 +21,29 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../App.css";
 //web3
 import Web3 from "web3/dist/web3.min.js";
-//import CFT_contract from "../../abi/FlexibilityList.json";
-//import { useWeb3React } from "@web3-react/core";
-//import { injected } from "../../wallet/Connect";
+import CFT_contract from "../../abi/FlexibilityList.json";
+import { useWeb3React } from "@web3-react/core";
+import { injected } from "../../wallet/Connect";
 //useContext
 import Web3Context from "../../Web3Context";
 
-export default function CreateAR() {
+export default function CreateAR(address) {
   const navigate = useNavigate();
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
-  const [owner, setOwner] = React.useState(null);
+  const { active, account, library, activate, deactivate } = useWeb3React();
   const [quantity, setQuantity] = React.useState(null);
   const [startOfDelivery, setStartOfDelivery] = React.useState(null);
-
   const navigateToCftList = () => {
     navigate('/cftList');
+  }
+
+  async function connect() {
+    try {
+      await activate(injected);
+    } catch (ex) {
+      console.log(ex);
+    }
   }
 
   const epoch = (date) => {
@@ -49,11 +56,11 @@ export default function CreateAR() {
     const networkId = await web3.eth.net.getId();
     const CFT = new web3.eth.Contract(
       CFT_contract.abi,
-      CFT_contract.networks[networkId].address
+      address
     );
 
     const gas = await CFT.methods
-      .createActivationRequest(owner, quantity, startOfDelivery)
+      .createActivationRequest(account, quantity, startOfDelivery)
       .estimateGas({ from: account });
 
     const gasPrice = await web3.eth.getGasPrice();
@@ -101,7 +108,7 @@ export default function CreateAR() {
               Submit an activation request
             </Typography>
           </Grid>
-          <Grid
+          {active ? (<Grid
             item
             container
             direction="row"
@@ -123,7 +130,8 @@ export default function CreateAR() {
                 <TextField
                   type="text"
                   sx={{ m: 1, minWidth: 250 }}
-                  onChange={(e) => setOwner(e.target.value)}
+                  value={account}
+                  disabled
                 />
               </Grid>
               <Grid item p={1}>
@@ -171,7 +179,7 @@ export default function CreateAR() {
                 />
               </Grid>
             </Grid>
-          </Grid>
+          
           <Grid
             p={1}
             item
@@ -185,6 +193,16 @@ export default function CreateAR() {
                 Submit
               </Button>
           </Grid>
+          </Grid>)
+          :(<Grid
+              item
+              container
+              direction="row"
+              justifyContent="space-around"
+              alignItems="center"
+            >
+              <Button onClick={connect}>Connect</Button>
+            </Grid>)}
         </Grid>
       </Paper>
     </Grid>
