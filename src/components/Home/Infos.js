@@ -37,7 +37,7 @@ export default function Overview() {
                             <Typography className="phrase">Current delivery period</Typography>
                         </Grid>
                         <Grid item>
-                            <Typography variant="h6" className="count">{deliveryPeriod}</Typography>
+                            <Typography variant="h6" className="count">{}</Typography>
                             
                         </Grid>
                     </Grid>
