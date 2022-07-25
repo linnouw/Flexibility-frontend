@@ -31,12 +31,16 @@ export default function UpcomingCFT() {
           direction="column"
           justifyContent="center"
           alignItems="center">
-        {cftsAddresses && 
-          cftsAddresses.map((address, index) => (
+        {cftsAddresses.length!=0?
+         ( cftsAddresses.map((address, index) => (
             <>
               <UpcomingCFTItem address={address} key={index}/>
             </>
-          ))}
+          ))):(
+            <Grid item m={1}>
+              <Typography variant="h6" className="phrase">No CFTs</Typography>
+            </Grid>
+          )}
         <Divider orientation="horizontal"/>
       </Grid>
       <Grid container
