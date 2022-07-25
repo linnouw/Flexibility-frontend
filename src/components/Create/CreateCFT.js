@@ -13,7 +13,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import PublishIcon from "@mui/icons-material/Publish";
-import { Link } from "react-router-dom";
+import { Link, NavigationType, useNavigate } from "react-router-dom";
 // style
 import "../../App.css";
 //web3
@@ -25,6 +25,7 @@ import FlexibilityList_contract from "../../abi/FlexibilityList.json";
 import Web3Context from "../../Web3Context";
 
 export default function CreateCFT() {
+  const navigate = useNavigate();
   const context = React.useContext(Web3Context);
   const { active, account, library, activate, deactivate } = useWeb3React();
   const { projectUrl, productsAddresses } = context;
@@ -34,6 +35,10 @@ export default function CreateCFT() {
   const [closingDate, setClosingDate] = React.useState(null);
   const [localization, setLocalization] = React.useState(null);
   const [value, setValue] = React.useState("");
+
+  const navigateToCftList = () => {
+    navigate('/cftList');
+  }
 
   async function connect() {
     try {
@@ -87,6 +92,8 @@ export default function CreateCFT() {
       .send({ from: account, gas, gasPrice })
       .then((response) => alert("successfully added"))
       .catch((err) => alert(err));
+
+      navigateToCftList();
   };
 
   return (
@@ -220,12 +227,10 @@ export default function CreateCFT() {
                 justifyContent="center"
                 alignItems="center"
               >
-                <Link className="link" to="/cftList">
                   <Button variant="contained" onClick={handleSubmit}>
                     <PublishIcon />
                     Open
                   </Button>
-                </Link>
               </Grid>
             </Grid>
           ) : (

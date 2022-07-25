@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 // style
 import "../../App.css";
 //web3
@@ -26,6 +26,7 @@ import Web3 from "web3/dist/web3.min.js";
 import Web3Context from "../../Web3Context";
 
 export default function CreateBid() {
+  const navigate = useNavigate();
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
   const [owner, setOwner] = React.useState(null);
@@ -34,6 +35,10 @@ export default function CreateBid() {
   const [quantity, setQuantity] = React.useState(null);
   const [localization, setLocalization] = React.useState("");
   const [startOfDelivery, setStartOfDelivery] = React.useState(null);
+
+  const navigateToCftList = () => {
+    navigate('/cftList');
+  }
 
   const epoch = (date) => {
     return Date.parse(date);
@@ -77,6 +82,7 @@ export default function CreateBid() {
       .send({ from: account, gas, gasPrice })
       .then((response) => alert("successfully added"))
       .catch((err) => alert(err));
+      navigateToCftList();
   };
 
   return (
@@ -213,12 +219,10 @@ export default function CreateBid() {
             justifyContent="center"
             alignItems="center"
           >
-            <Link className="link" to="/cftList">
               <Button variant="contained" onClick={handleSubmit}>
                 <SaveIcon />
                 Submit
               </Button>
-            </Link>
           </Grid>
         </Grid>
       </Paper>

@@ -11,6 +11,11 @@ import Web3Context from "../../Web3Context";
 export default function ProductList() {
   const context = React.useContext(Web3Context);
   const { productsAddresses } = context;
+  const [page, setPage] = React.useState(1);
+  
+  const handleChange = (e, value) => {
+    setPage(value);
+  };
 
   return (
     <Paper
@@ -19,9 +24,9 @@ export default function ProductList() {
     >
       <Typography className="product-list-title">Product Items</Typography>
       {productsAddresses &&
-        productsAddresses.map((address) => (
+        productsAddresses.map((address, index) => (
           <>
-            <ProductListItem address={address} />
+            <ProductListItem address={address} key={index}/>
           </>
         ))}
       <Grid
@@ -31,7 +36,7 @@ export default function ProductList() {
         alignItems="center"
         p={1}
       >
-        <Pagination count={2} />
+        <Pagination count={2} page={page} onChange={handleChange}/>
       </Grid>
     </Paper>
   );

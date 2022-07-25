@@ -11,8 +11,13 @@ import UpcomingCFTItem from './UpcomingCFTItem';
 import {Paper, Grid, Typography, Button, Divider} from '@mui/material';
 // style
 import '../../App.css';
+//useContext
+import Web3Context from "../../Web3Context";
 
 export default function UpcomingCFT() {
+  const context = React.useContext(Web3Context);
+  const { cftsAddresses } = context;
+
   return (
     <Paper elevation={0} style={{borderRadius: 10, padding:10}}>
       <Grid container
@@ -26,8 +31,12 @@ export default function UpcomingCFT() {
           direction="column"
           justifyContent="center"
           alignItems="center">
-        <UpcomingCFTItem/>
-        <UpcomingCFTItem/>
+        {cftsAddresses && 
+          cftsAddresses.map((address, index) => (
+            <>
+              <UpcomingCFTItem address={address} key={index}/>
+            </>
+          ))}
         <Divider orientation="horizontal"/>
       </Grid>
       <Grid container

@@ -1,3 +1,4 @@
+'use strict';
 import React from "react";
 // @MUI
 import {
@@ -5,10 +6,7 @@ import {
   Typography,
   Divider,
   List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
+  ListItem
 } from "@mui/material";
 // style
 import "../../App.css";
@@ -21,7 +19,7 @@ import Web3Context from "../../Web3Context";
 export default function ProductListItem(address) {
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
-  const [productDetails, setProductDetails] = React.useState();
+  const [productDetails, setProductDetails] = React.useState([]);
 
   React.useEffect(() => {
     load();
@@ -30,10 +28,9 @@ export default function ProductListItem(address) {
   async function load() {
     const web3 = new Web3(new Web3.providers.HttpProvider(projectUrl));
     //interact with specific contract
-    const Product = new web3.eth.Contract(Product_contract.abi, address);
-    //get auctionEnd value
+    const Product = new web3.eth.Contract(Product_contract.abi, address["address"]);
     const details = await Product.methods.getProductDetails().call();
-    setProductDetails(details);
+    setProductDetails(Object.values(details));   
   }
 
   return (
@@ -48,7 +45,7 @@ export default function ProductListItem(address) {
         <ListItem>
           <Grid className="product-item-value-box">
             <Typography item className="product-item-value">
-              Product name
+              {productDetails[1]}
             </Typography>
           </Grid>
         </ListItem>
@@ -63,7 +60,7 @@ export default function ProductListItem(address) {
               <Typography className="product-item-title">EIC Code</Typography>
             </Grid>
             <Grid item className="product-item-value-box">
-              <Typography className="product-item-value">12</Typography>
+              <Typography className="product-item-value">{productDetails[0]}</Typography>
             </Grid>
           </Grid>
         </ListItem>
@@ -81,7 +78,7 @@ export default function ProductListItem(address) {
               </Typography>
             </Grid>
             <Grid item className="product-item-value-box">
-              <Typography className="product-item-value">12</Typography>
+              <Typography className="product-item-value">{productDetails[2]}</Typography>
             </Grid>
           </Grid>
         </ListItem>
@@ -97,7 +94,7 @@ export default function ProductListItem(address) {
               <Typography className="product-item-title">Direction</Typography>
             </Grid>
             <Grid item className="product-item-value-box">
-              <Typography className="product-item-value">12</Typography>
+              <Typography className="product-item-value">{productDetails[3]}</Typography>
             </Grid>
           </Grid>
         </ListItem>
@@ -115,7 +112,7 @@ export default function ProductListItem(address) {
               </Typography>
             </Grid>
             <Grid item className="product-item-value-box">
-              <Typography className="product-item-value">12</Typography>
+              <Typography className="product-item-value">{productDetails[4]}</Typography>
             </Grid>
           </Grid>
         </ListItem>

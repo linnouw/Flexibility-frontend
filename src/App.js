@@ -12,7 +12,7 @@ import Web3 from "web3/dist/web3.min.js";
 import FlexibilityList_contract from "./abi/FlexibilityList.json";
 
 export default function App() {
-  const projectUrl = "http://localhost:7545";
+  const projectUrl = "http://localhost:8545";
   const [productsAddresses, setProductsAddresses] = React.useState();
   const [cftsAddresses, setCftAdresses] = React.useState();
 
