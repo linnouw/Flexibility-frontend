@@ -19,16 +19,17 @@ import { Link, useNavigate} from "react-router-dom";
 import "../../App.css";
 //web3
 import Web3 from "web3/dist/web3.min.js";
-//import CFT_contract from "../../abi/FlexibilityList.json";
-//import { useWeb3React } from "@web3-react/core";
-//import { injected } from "../../wallet/Connect";
+import CFT_contract from "../../abi/FlexibilityList.json";
+import { useWeb3React } from "@web3-react/core";
+import { injected } from "../../wallet/Connect";
 //useContext
 import Web3Context from "../../Web3Context";
 
-export default function CreateBid() {
+export default function CreateBid(address) {
   const navigate = useNavigate();
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
+  const { active, account, library, activate, deactivate } = useWeb3React();
   const [owner, setOwner] = React.useState(null);
   const [serviceProvider, setServiceProvider] = React.useState(null);
   const [price, setPrice] = React.useState(null);
@@ -38,6 +39,14 @@ export default function CreateBid() {
 
   const navigateToCftList = () => {
     navigate('/cftList');
+  }
+
+  async function connect() {
+    try {
+      await activate(injected);
+    } catch (ex) {
+      console.log(ex);
+    }
   }
 
   const epoch = (date) => {
@@ -54,7 +63,7 @@ export default function CreateBid() {
     const networkId = await web3.eth.net.getId();
     const CFT = new web3.eth.Contract(
       CFT_contract.abi,
-      CFT_contract.networks[networkId].address
+      address
     );
 
     const gas = await CFT.methods
@@ -71,7 +80,7 @@ export default function CreateBid() {
     const gasPrice = await web3.eth.getGasPrice();
 
     const tx = await CFT.methods
-      .createCFT(
+      .createBid(
         owner,
         serviceProvider,
         price,
@@ -197,7 +206,7 @@ export default function CreateBid() {
                     onChange={handleChange}
                   >
                     <MenuItem value={"*"}>*</MenuItem>
-                    <MenuItem value={"A"}>Zone A</MenuItem>
+                    <MenuItem value={"A"}>{}</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
