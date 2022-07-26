@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate, useLocation} from "react-router-dom";
 // style
 import "../../App.css";
 //web3
@@ -25,8 +25,9 @@ import { injected } from "../../wallet/Connect";
 //useContext
 import Web3Context from "../../Web3Context";
 
-export default function CreateBid(address) {
+export default function CreateBid(address, cftDetails) {
   const navigate = useNavigate();
+  const data = useLocation();
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
   const { active, account, library, activate, deactivate } = useWeb3React();
@@ -62,7 +63,7 @@ export default function CreateBid(address) {
     const networkId = await web3.eth.net.getId();
     const CFT = new web3.eth.Contract(
       CFT_contract.abi,
-      address
+      data.state.address["address"]
     );
 
     const gas = await CFT.methods
@@ -206,7 +207,7 @@ export default function CreateBid(address) {
                     onChange={handleChange}
                   >
                     <MenuItem value={"*"}>*</MenuItem>
-                    <MenuItem value={"A"}>{}</MenuItem>
+                    <MenuItem value={`${data.state.cftDetails[5]}`}>{data.state.cftDetails[5]}</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>

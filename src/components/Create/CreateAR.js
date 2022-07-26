@@ -8,15 +8,11 @@ import {
   Typography,
   Paper,
   TextField,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
   InputAdornment,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation} from "react-router-dom";
 // style
 import "../../App.css";
 //web3
@@ -27,8 +23,9 @@ import { injected } from "../../wallet/Connect";
 //useContext
 import Web3Context from "../../Web3Context";
 
-export default function CreateAR(address) {
+export default function CreateAR(address, cftDetails) {
   const navigate = useNavigate();
+  const data = useLocation();
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
   const { active, account, library, activate, deactivate } = useWeb3React();
@@ -56,7 +53,7 @@ export default function CreateAR(address) {
     const networkId = await web3.eth.net.getId();
     const CFT = new web3.eth.Contract(
       CFT_contract.abi,
-      address
+      data.state.address["address"]
     );
 
     const gas = await CFT.methods
@@ -167,13 +164,13 @@ export default function CreateAR(address) {
                 />
               </Grid>
               <Grid item p={1}>
-                <Typography className="label">Localization:</Typography>
+                <Typography className="label">Localization: {data.state.localization}</Typography>
                 <TextField
                   type="text"
                   disabled
                   InputProps={{
                     startAdornment: (
-                      <InputAdornment position="start">Zone:</InputAdornment>
+                      <InputAdornment position="start">Zone: {data.state.cftDetails[5]}</InputAdornment>
                     ),
                   }}
                 />
