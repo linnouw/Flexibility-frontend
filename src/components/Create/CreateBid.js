@@ -30,7 +30,6 @@ export default function CreateBid(address) {
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
   const { active, account, library, activate, deactivate } = useWeb3React();
-  const [owner, setOwner] = React.useState(null);
   const [serviceProvider, setServiceProvider] = React.useState(null);
   const [price, setPrice] = React.useState(null);
   const [quantity, setQuantity] = React.useState(null);
@@ -68,7 +67,7 @@ export default function CreateBid(address) {
 
     const gas = await CFT.methods
       .createBid(
-        owner,
+        account,
         serviceProvider,
         price,
         quantity,
@@ -81,7 +80,7 @@ export default function CreateBid(address) {
 
     const tx = await CFT.methods
       .createBid(
-        owner,
+        account,
         serviceProvider,
         price,
         quantity,
@@ -130,7 +129,7 @@ export default function CreateBid(address) {
               Submit a bid
             </Typography>
           </Grid>
-          <Grid
+          {active ? (<Grid
             item
             container
             direction="row"
@@ -152,7 +151,8 @@ export default function CreateBid(address) {
                 <TextField
                   type="text"
                   sx={{ m: 1, minWidth: 250 }}
-                  onChange={(e) => setOwner(e.target.value)}
+                  value={account}
+                  disabled
                 />
               </Grid>
               <Grid item p={1}>
@@ -219,7 +219,15 @@ export default function CreateBid(address) {
                 />
               </Grid>
             </Grid>
-          </Grid>
+          </Grid>):(<Grid
+              item
+              container
+              direction="row"
+              justifyContent="space-around"
+              alignItems="center"
+            >
+              <Button onClick={connect}>Connect</Button>
+            </Grid>)}
           <Grid
             p={1}
             item

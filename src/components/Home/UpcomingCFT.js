@@ -26,7 +26,7 @@ export default function UpcomingCFT() {
           direction="column"
           justifyContent="center"
           alignItems="center">
-        {cftsAddresses.length!=0?
+        {cftsAddresses&&cftsAddresses.length!=0?
          ( cftsAddresses.map((address, index) => (
             <>
               <UpcomingCFTItem address={address} key={index}/>
