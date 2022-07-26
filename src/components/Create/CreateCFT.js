@@ -29,7 +29,6 @@ export default function CreateCFT() {
   const context = React.useContext(Web3Context);
   const { active, account, library, activate, deactivate } = useWeb3React();
   const { projectUrl, productsAddresses } = context;
-  const [product, setProduct] = React.useState(null);
   const [powerNeeded, setPowerNeeded] = React.useState(null);
   const [openingDate, setOpeningDate] = React.useState(null);
   const [closingDate, setClosingDate] = React.useState(null);
@@ -48,10 +47,11 @@ export default function CreateCFT() {
     }
   }
 
-  const handleChange = (e) => {
-    setValue(e.target.value);
-    if (value === "mFRR") setProduct(productsAddresses[0]);
-    else setProduct(productsAddresses[1]);
+  const setProduct = (value) => {
+    
+    if (value === "mFRR") 
+      return(productsAddresses[0]);
+    else return(productsAddresses[1]);
   };
 
   const epoch = (date) => {
@@ -70,7 +70,7 @@ export default function CreateCFT() {
     const gas = await FlexibilityList.methods
       .createCFT(
         account,
-        product,
+        setProduct(value),
         powerNeeded,
         openingDate,
         closingDate,
@@ -83,7 +83,7 @@ export default function CreateCFT() {
     const tx = await FlexibilityList.methods
       .createCFT(
         account,
-        product,
+        setProduct(value),
         powerNeeded,
         openingDate,
         closingDate,
@@ -151,7 +151,7 @@ export default function CreateCFT() {
                       id="demo-select-small"
                       label="product"
                       value={value}
-                      onChange={handleChange}
+                      onChange={(e)=>setValue(e.target.value)}
                     >
                       <MenuItem value={"mFRR"}>mFRR</MenuItem>
                       <MenuItem value={"aFRR"}>aFRR</MenuItem>
