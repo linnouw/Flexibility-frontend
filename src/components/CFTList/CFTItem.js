@@ -32,8 +32,8 @@ export default function CFTItem(address) {
     const CFT = new web3.eth.Contract(CFT_contract.abi, address["address"]);
     const cft_details = await CFT.methods.getCFTDetails().call();
     setCftDetails(Object.values(cft_details));
-    const product = await CFT.methods.getProductName(cft_details[1]).call();
-    setProduct(product);
+    const product_name = await CFT.methods.getProductName(cft_details[1]).call();
+    setProduct(product_name);
   }
 
   const convert_Milliseconds_to_date = (time) => {
