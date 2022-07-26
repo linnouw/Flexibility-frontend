@@ -13,6 +13,7 @@ export default function UpcomingCFTItem(address) {
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
   const [cftDetails, setCftDetails] = React.useState([]);
+  const [product, setProduct] = React.useState();
 
   React.useEffect(() => {
     load();
@@ -24,6 +25,8 @@ export default function UpcomingCFTItem(address) {
     const CFT = new web3.eth.Contract(CFT_contract.abi, address["address"]);
     const cft_details = await CFT.methods.getCFTDetails().call();
     setCftDetails(Object.values(cft_details));
+    const product_name = await CFT.methods.getProductName(cft_details[1]).call();
+    setProduct(product_name);
   }
 
   const convert_Milliseconds_to_date = (time) => {
@@ -68,7 +71,7 @@ export default function UpcomingCFTItem(address) {
             <Typography className="product-item-title" noWrap>{convert_Milliseconds_to_date(parseInt(cftDetails[3]))}</Typography>
             </Grid>
             <Grid item>
-            <Typography className="product-item-title" noWrap>product</Typography>
+            <Typography className="product-item-title" noWrap>{product}</Typography>
             </Grid>
        </Grid>
        <Grid xs={12} md={6} item container direction="column"
