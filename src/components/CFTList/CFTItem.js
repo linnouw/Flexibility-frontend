@@ -20,6 +20,7 @@ export default function CFTItem(address) {
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
   const [cftDetails, setCftDetails] = React.useState([]);
+  const [product, setProduct] = React.useState();
 
   React.useEffect(() => {
     load();
@@ -31,6 +32,8 @@ export default function CFTItem(address) {
     const CFT = new web3.eth.Contract(CFT_contract.abi, address["address"]);
     const cft_details = await CFT.methods.getCFTDetails().call();
     setCftDetails(Object.values(cft_details));
+    const product = await CFT.methods.getProductName(cft_details[1]).call();
+    setProduct(product);
   }
 
   const convert_Milliseconds_to_date = (time) => {
@@ -67,10 +70,13 @@ export default function CFTItem(address) {
         00:00
       </Typography>
       <Typography className="cftItem-text" variant="h5" component="div">
-        Product
+        {product}
       </Typography>
       <Typography className="cftItem-text" sx={{ mb: 1.5 }}>
-        For : {convert_Milliseconds_to_date(parseInt(cftDetails[3]))}
+        Opening Time : {convert_Milliseconds_to_date(parseInt(cftDetails[3]))}
+      </Typography>
+      <Typography className="cftItem-text" sx={{ mb: 1.5 }}>
+        Closing Time : {convert_Milliseconds_to_date(parseInt(cftDetails[4]))}
       </Typography>
       <Typography className="cftItem-text" variant="body2">
         {cftDetails[2]} MW
@@ -80,13 +86,13 @@ export default function CFTItem(address) {
       </Typography>
     </CardContent>
     <CardActions>
-        <Link className="link" to="/createAR">
+        <Link className="link" to={`/createAR`} state={{address, cftDetails}}>
             <Button size="small">Submit AR</Button>
         </Link>
-        <Link className="link" to="/createBid">
+        <Link className="link" to={`/createBid`} state={{address, cftDetails}}>
             <Button size="small">Submit Bid</Button>
         </Link>
-        <Link className="link" to="/ARL">
+        <Link className="link" to={`/ARL`} state={{}}>
             <Button size="small">View AR list</Button>
         </Link>
     </CardActions>

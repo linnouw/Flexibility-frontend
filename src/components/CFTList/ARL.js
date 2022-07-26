@@ -1,14 +1,14 @@
 import React from 'react';
-// components
-
 // @MUI
 import {Grid,Typography,Button, Paper, Table, TableHead, TableRow, TableCell, TableBody} from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 // style
 import '../../App.css';
 
 export default function ARL() {
+  const data = useLocation();
+
 
   return (
     <Grid  container
@@ -44,7 +44,7 @@ export default function ARL() {
         </TableRow>
       </TableHead>
       {/* <TableBody>
-          <TableRow
+          {<TableRow
             
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
           >
@@ -55,7 +55,7 @@ export default function ARL() {
             <TableCell align="right"></TableCell>
             <TableCell align="right"></TableCell>
             <TableCell align="right"></TableCell>
-          </TableRow>
+          </TableRow>}
       </TableBody> */}
     </Table>
     </Paper>
