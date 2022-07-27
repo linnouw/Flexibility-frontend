@@ -14,16 +14,19 @@ import FlexibilityList_contract from "./abi/FlexibilityList.json";
 export default function App() {
   const projectUrl = "http://localhost:8545";
   const [productsAddresses, setProductsAddresses] = React.useState();
-  const [cftsAddresses, setCftAdresses] = React.useState();
+  const [cftAddresses, setCFTAddresses] = React.useState();
+  const [upcoming, setUpcoming] = React.useState();
 
   /**fetch products addresses with web3*/
   React.useEffect(() => {
     load();
-  }, [productsAddresses, cftsAddresses]);
+  }, [productsAddresses, cftAddresses]);
 
   async function load() {
     const web3 = new Web3(new Web3.providers.HttpProvider(projectUrl));
     const networkId = await web3.eth.net.getId();
+
+    const accounts = await web3.eth.getAccounts();
 
     const FlexibilityList = new web3.eth.Contract(
       FlexibilityList_contract.abi,
@@ -35,14 +38,15 @@ export default function App() {
       .call();
     setProductsAddresses(products_addresses);
     //get cfts
-    const cfts_addresses = await FlexibilityList.methods.getAllCFTs().call();
-    setCftAdresses(cfts_addresses);
+    const cft = await FlexibilityList.methods.getAllCFTs().call();
+    setCFTAddresses(cft);
+    
   }
 
   return (
     <Grid className="minHeight">
       <Web3Context.Provider
-        value={{ projectUrl, productsAddresses, cftsAddresses }}
+        value={{ projectUrl, productsAddresses, cftAddresses }}
       >
         <Sidebar />
       </Web3Context.Provider>

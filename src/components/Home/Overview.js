@@ -8,7 +8,7 @@ import Web3Context from "../../Web3Context";
 
 export default function Overview() {
   const context = React.useContext(Web3Context);
-  const { productsAddresses, cftsAddresses } = context;
+  const { productsAddresses, cftAddresses } = context;
 
   return (
     <Paper elevation={0} style={{ borderRadius: 10 }}>
@@ -29,7 +29,7 @@ export default function Overview() {
           alignItems="center"
         >
           <Typography variant="h5" className="count">
-            {cftsAddresses && cftsAddresses.length}
+            {cftAddresses && cftAddresses.length}
           </Typography>
           <Typography className="phrase">Total CFTs</Typography>
         </Grid>

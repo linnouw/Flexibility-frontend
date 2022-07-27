@@ -10,7 +10,7 @@ import Web3Context from "../../Web3Context";
 
 export default function CFTList() {
   const context = React.useContext(Web3Context);
-  const { cftsAddresses } = context;
+  const { cftAddresses } = context;
 
   return (
     <Grid container
@@ -22,8 +22,8 @@ export default function CFTList() {
             <Typography variant="h5" className="title">List of current CFTs</Typography>
         </Grid>
         <Grid item container m={1}>
-            {cftsAddresses &&
-            cftsAddresses.map((address, index) => ( 
+            {cftAddresses &&
+            cftAddresses.map((address, index) => ( 
                 <Grid item  m={1} key={index}>
                     <CFTItem address={address}/>
                 </Grid>
