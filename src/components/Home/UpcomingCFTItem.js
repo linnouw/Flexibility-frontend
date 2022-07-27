@@ -8,8 +8,13 @@ import Web3 from "web3/dist/web3.min.js";
 import CFT_contract from "../../abi/CFT.json";
 //useContext
 import Web3Context from "../../Web3Context";
+import PropTypes from "prop-types";
 
-export default function UpcomingCFTItem(address) {
+UpcomingCFTItem.propTypes = {
+  address: PropTypes.string,
+  };
+  
+export default function UpcomingCFTItem({address}) {
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
   const [cftDetails, setCftDetails] = React.useState([]);
@@ -24,7 +29,7 @@ export default function UpcomingCFTItem(address) {
   async function load() {
     const web3 = new Web3(new Web3.providers.HttpProvider(projectUrl));
     //interact with specific contract
-    const CFT = new web3.eth.Contract(CFT_contract.abi, address["address"]);
+    const CFT = new web3.eth.Contract(CFT_contract.abi, address);
     const cft_details = await CFT.methods.getCFTDetails().call();
     setCftDetails(Object.values(cft_details));
     const product_name = await CFT.methods.getProductName(cft_details[1]).call();

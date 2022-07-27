@@ -24,8 +24,14 @@ import { useWeb3React } from "@web3-react/core";
 import { injected } from "../../wallet/Connect";
 //useContext
 import Web3Context from "../../Web3Context";
+import PropTypes from "prop-types";
 
-export default function CreateBid(address, cftDetails) {
+CreateBid.propTypes = {
+  address: PropTypes.string,
+  cftDetails: PropTypes.array,
+  };
+
+export default function CreateBid({address, cftDetails}) {
   const navigate = useNavigate();
   const data = useLocation();
   const context = React.useContext(Web3Context);
@@ -63,7 +69,7 @@ export default function CreateBid(address, cftDetails) {
     const networkId = await web3.eth.net.getId();
     const CFT = new web3.eth.Contract(
       CFT_contract.abi,
-      data.state.address["address"]
+      data.state.address
     );
 
     const gas = await CFT.methods

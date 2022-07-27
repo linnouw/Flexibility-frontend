@@ -1,11 +1,10 @@
 import React from 'react';
 import {
     BrowserRouter as Router,
-    Routes,
-    Route,
     Link,
-    Redirect
   } from 'react-router-dom';
+// @components
+import Timer from "./Timer";
 // @MUI
 import {Card, CardContent, Typography, CardActions, Button} from '@mui/material';
 // style
@@ -15,8 +14,13 @@ import Web3 from "web3/dist/web3.min.js";
 import CFT_contract from "../../abi/CFT.json";
 //useContext
 import Web3Context from "../../Web3Context";
+import PropTypes from "prop-types";
 
-export default function CFTItem(address) {
+CFTItem.propTypes = {
+  address: PropTypes.number
+};
+
+export default function CFTItem({address}) {
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
   const [cftDetails, setCftDetails] = React.useState([]);
@@ -31,7 +35,7 @@ export default function CFTItem(address) {
   async function load() {
     const web3 = new Web3(new Web3.providers.HttpProvider(projectUrl));
     //interact with specific contract
-    const CFT = new web3.eth.Contract(CFT_contract.abi, address["address"]);
+    const CFT = new web3.eth.Contract(CFT_contract.abi, address);
     const cft_details = await CFT.methods.getCFTDetails().call();
     setCftDetails(Object.values(cft_details));
     const product_name = await CFT.methods.getProductName(cft_details[1]).call();
@@ -49,32 +53,10 @@ export default function CFTItem(address) {
 
   }
 
-  const millisToMinutesAndSeconds = (milliseconds) => {
-    //Get hours from milliseconds
-    let hours = milliseconds / (1000*60*60);
-    let absoluteHours = Math.floor(hours);
-    let h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
-
-    //Get remainder from hours and convert to minutes
-    let minutes = (hours - absoluteHours) * 60;
-    let absoluteMinutes = Math.floor(minutes);
-    let m = absoluteMinutes > 9 ? absoluteMinutes : '0' +  absoluteMinutes;
-
-    //Get remainder from minutes and convert to seconds
-    let seconds = (minutes - absoluteMinutes) * 60;
-    let absoluteSeconds = Math.floor(seconds);
-    let s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
-
-
-    return h + ':' + m + ':' + s;
-}
-
   return (
     closingTime > now ? (<Card sx={{ minWidth: 275 }} elevation={0} style={{borderRadius: 10}}>
     <CardContent>
-      <Typography className="cftItem-text" sx={{ fontSize: 14 }} gutterBottom>
-        00:00
-      </Typography>
+      {/*<Timer closingTime={closingTime} />*/}
       <Typography className="cftItem-text" variant="h5" component="div">
         {product}
       </Typography>

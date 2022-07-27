@@ -15,8 +15,13 @@ import Web3 from "web3/dist/web3.min.js";
 import Product_contract from "../../abi/Product.json";
 //useContext
 import Web3Context from "../../Web3Context";
+import PropTypes from "prop-types";
 
-export default function ProductListItem(address) {
+ProductListItem.propTypes = {
+  address: PropTypes.string,
+  };
+
+export default function ProductListItem({address}) {
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
   const [productDetails, setProductDetails] = React.useState([]);
@@ -28,7 +33,7 @@ export default function ProductListItem(address) {
   async function load() {
     const web3 = new Web3(new Web3.providers.HttpProvider(projectUrl));
     //interact with specific contract
-    const Product = new web3.eth.Contract(Product_contract.abi, address["address"]);
+    const Product = new web3.eth.Contract(Product_contract.abi, address);
     const details = await Product.methods.getProductDetails().call();
     setProductDetails(Object.values(details));   
   }
