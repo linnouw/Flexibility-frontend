@@ -21,6 +21,8 @@ export default function CFTItem(address) {
   const { projectUrl } = context;
   const [cftDetails, setCftDetails] = React.useState([]);
   const [product, setProduct] = React.useState();
+  const [closingTime, setClosingTime] = React.useState();
+  const [now, setNow] = React.useState();
 
   React.useEffect(() => {
     load();
@@ -34,6 +36,10 @@ export default function CFTItem(address) {
     setCftDetails(Object.values(cft_details));
     const product_name = await CFT.methods.getProductName(cft_details[1]).call();
     setProduct(product_name);
+    const time = parseInt(cftDetails[4]);
+    setClosingTime(time);
+    const now_time = Date.now();
+    setNow(now_time);
   }
 
   const convert_Milliseconds_to_date = (time) => {
@@ -64,7 +70,7 @@ export default function CFTItem(address) {
 }
 
   return (
-    <Card sx={{ minWidth: 275 }} elevation={0} style={{borderRadius: 10}}>
+    closingTime > now ? (<Card sx={{ minWidth: 275 }} elevation={0} style={{borderRadius: 10}}>
     <CardContent>
       <Typography className="cftItem-text" sx={{ fontSize: 14 }} gutterBottom>
         00:00
@@ -96,6 +102,6 @@ export default function CFTItem(address) {
             <Button size="small">View AR list</Button>
         </Link>
     </CardActions>
-  </Card>
+  </Card>):(<></>)
   );
 }

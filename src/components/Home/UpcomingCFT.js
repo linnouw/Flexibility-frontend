@@ -11,7 +11,7 @@ import Web3Context from "../../Web3Context";
 
 export default function UpcomingCFT() {
   const context = React.useContext(Web3Context);
-  const { cftsAddresses } = context;
+  const { cftAddresses } = context;
 
   return (
     <Paper elevation={0} style={{borderRadius: 10, padding:10}}>
@@ -26,8 +26,8 @@ export default function UpcomingCFT() {
           direction="column"
           justifyContent="center"
           alignItems="center">
-        {cftsAddresses&&cftsAddresses.length!=0?
-         ( cftsAddresses.map((address, index) => (
+        {cftAddresses&&cftAddresses.length!=0?
+         ( cftAddresses.map((address, index) => (
             <>
               <UpcomingCFTItem address={address} key={index}/>
             </>

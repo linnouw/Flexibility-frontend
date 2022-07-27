@@ -14,6 +14,8 @@ export default function UpcomingCFTItem(address) {
   const { projectUrl } = context;
   const [cftDetails, setCftDetails] = React.useState([]);
   const [product, setProduct] = React.useState();
+  const [openingTime, setOpeningTime] = React.useState();
+  const [now, setNow] = React.useState();
 
   React.useEffect(() => {
     load();
@@ -27,6 +29,11 @@ export default function UpcomingCFTItem(address) {
     setCftDetails(Object.values(cft_details));
     const product_name = await CFT.methods.getProductName(cft_details[1]).call();
     setProduct(product_name);
+    const time = parseInt(cftDetails[3]);
+    setOpeningTime(time);
+    const now_time = Date.now();
+    setNow(now_time);
+
   }
 
   const convert_Milliseconds_to_date = (time) => {
@@ -57,8 +64,8 @@ export default function UpcomingCFTItem(address) {
 }
   
 
-  return (
-    <Stack
+  return(
+    openingTime > now ? (<Stack
     direction="row"
     divider={<Divider className="colored-divider" orientation="vertical" flexItem />}
     p={2}
@@ -89,6 +96,6 @@ export default function UpcomingCFTItem(address) {
             </Grid>
        </Grid>
        
-    </Stack>
-  );
+    </Stack>) : (<></>)
+    );
 }
