@@ -1,6 +1,6 @@
 import React from "react";
 // @MUI
-import { Grid, Button } from "@mui/material";
+import { Grid } from "@mui/material";
 // components
 import Sidebar from "./components/Sidebar/Sidebar";
 // style
@@ -14,15 +14,16 @@ import FlexibilityList_contract from "./abi/FlexibilityList.json";
 export default function App() {
   const projectUrl = "http://localhost:8545";
   const [productsAddresses, setProductsAddresses] = React.useState();
-  const [cftAddresses, setCFTAddresses] = React.useState();
+  const [cftAddresses, setCFTAddresses] = React.useState([]);
   const [upcoming, setUpcoming] = React.useState();
 
   /**fetch products addresses with web3*/
   React.useEffect(() => {
-    load();
-  }, [productsAddresses, cftAddresses]);
+      load();
+      console.log(cftAddresses);
+  }, [cftAddresses.length]);
 
-  async function load() {
+  const load = async() => {
     const web3 = new Web3(new Web3.providers.HttpProvider(projectUrl));
     const networkId = await web3.eth.net.getId();
 
@@ -36,17 +37,18 @@ export default function App() {
     const products_addresses = await FlexibilityList.methods
       .getAllProducts()
       .call();
-    setProductsAddresses(products_addresses);
     //get cfts
-    const cft = await FlexibilityList.methods.getAllCFTs().call();
-    setCFTAddresses(cft);
-    
+    const cft_addresses = await FlexibilityList.methods.getAllCFTs().call();
+      
+    setProductsAddresses(products_addresses);
+    setCFTAddresses(cft_addresses);
+
   }
 
   return (
     <Grid className="minHeight">
       <Web3Context.Provider
-        value={{ projectUrl, productsAddresses, cftAddresses }}
+        value={{ projectUrl, productsAddresses, cftAddresses , setCFTAddresses }}
       >
         <Sidebar />
       </Web3Context.Provider>

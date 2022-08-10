@@ -3,11 +3,12 @@ import React from 'react';
 import BarChart from './BarChart';
 import ActivationOrderChart from './ActivationOrderChart';
 // @MUI
-import {Grid, Typography, Paper} from '@mui/material';
+import {Grid, Typography} from '@mui/material';
 // style
 import '../../App.css';
 
 export default function Dashboard() {
+
   const MOLborderColor = 'rgb(55,128,156)';
   const MOLbackgroundColor = 'rgb(55,128,156, 0.5)';
 
@@ -24,8 +25,8 @@ export default function Dashboard() {
   const AOdatas=["40", "12"];
 
   return (
-    <Grid container className = "components-background" direction="column" justifyContent="flex-start" alignItems="flex-start">
-      <Grid item m={1}>
+    <Grid container className = "components-background" direction="row" justifyContent="flex-start" alignItems="flex-start">
+     <Grid item m={1}>
         <Typography variant = "h5" className = "title">Dashboard</Typography>
       </Grid>
       <Grid item m={1} container direction={{md:"row", xs:"column"}} justifyContent="flex-start" alignItems="flex-start">
@@ -38,7 +39,8 @@ export default function Dashboard() {
       </Grid>
       <Grid item m={1}>
         <ActivationOrderChart labels={AOlabels} datas={AOdatas}/>
-      </Grid>
+  </Grid>
     </Grid>
   );
+
 }

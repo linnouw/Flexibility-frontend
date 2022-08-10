@@ -6,7 +6,7 @@ import {
 // @components
 import Timer from "./Timer";
 // @MUI
-import {Card, CardContent, Typography, CardActions, Button} from '@mui/material';
+import {Grid, Card, CardContent, Typography, CardActions, Button} from '@mui/material';
 // style
 import '../../App.css';
 //web3
@@ -17,7 +17,7 @@ import Web3Context from "../../Web3Context";
 import PropTypes from "prop-types";
 
 CFTItem.propTypes = {
-  address: PropTypes.number
+  address: PropTypes.string
 };
 
 export default function CFTItem({address}) {
@@ -33,6 +33,7 @@ export default function CFTItem({address}) {
   }, [cftDetails]);
 
   async function load() {
+
     const web3 = new Web3(new Web3.providers.HttpProvider(projectUrl));
     //interact with specific contract
     const CFT = new web3.eth.Contract(CFT_contract.abi, address);
@@ -44,6 +45,8 @@ export default function CFTItem({address}) {
     setClosingTime(time);
     const now_time = Date.now();
     setNow(now_time);
+    
+
   }
 
   const convert_Milliseconds_to_date = (time) => {
@@ -54,9 +57,13 @@ export default function CFTItem({address}) {
   }
 
   return (
+
     closingTime > now ? (<Card sx={{ minWidth: 275 }} elevation={0} style={{borderRadius: 10}}>
     <CardContent>
       {/*<Timer closingTime={closingTime} />*/}
+      <Typography className="cftItem-text" sx={{ mb: 1.5 }}>
+        CFT Block address {address}
+      </Typography>
       <Typography className="cftItem-text" variant="h5" component="div">
         {product}
       </Typography>
@@ -74,16 +81,17 @@ export default function CFTItem({address}) {
       </Typography>
     </CardContent>
     <CardActions>
-        <Link className="link" to={`/createAR`} state={{address, cftDetails}}>
-            <Button size="small">Submit AR</Button>
-        </Link>
-        <Link className="link" to={`/createBid`} state={{address, cftDetails}}>
-            <Button size="small">Submit Bid</Button>
-        </Link>
-        <Link className="link" to={`/ARL`} state={{}}>
-            <Button size="small">View AR list</Button>
-        </Link>
+          <Link className="link" to={`/createAR`} state={{address, cftDetails}}>
+              <Button size="small">Submit AR</Button>
+          </Link>
+          <Link className="link" to={`/createBid`} state={{address, cftDetails}}>
+              <Button size="small">Submit Bid</Button>
+          </Link>
+          <Link className="link" to={`/delivery_period`} state={{address, cftDetails}}>
+              <Button size="small" >View results</Button>
+          </Link>
     </CardActions>
   </Card>):(<></>)
+
   );
 }
