@@ -48,6 +48,21 @@ export default function ProductListItem({address}) {
     >
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
         <ListItem>
+          <Grid
+              container
+              direction="row"
+              justifyContent="space-between"
+              alignItems="stretch"
+            >
+              <Grid item>
+                <Typography className="product-item-title">
+                  Product Block Address
+                </Typography>
+              </Grid>
+                <Typography className="product-item-title">{address}</Typography>
+            </Grid>
+        </ListItem>
+        <ListItem>
           <Grid className="product-item-value-box">
             <Typography item className="product-item-value">
               {productDetails[1]}

@@ -101,6 +101,6 @@ export default function UpcomingCFTItem({address}) {
             </Grid>
        </Grid>
        
-    </Stack>) : (<></>)
+    </Stack>) : (<Grid></Grid>)
     );
 }

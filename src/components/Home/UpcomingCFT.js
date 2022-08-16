@@ -28,9 +28,9 @@ export default function UpcomingCFT() {
           alignItems="center">
         {cftAddresses&&cftAddresses.length!=0?
          ( cftAddresses.map((address, index) => (
-            <>
+            <Grid key={index}>
               <UpcomingCFTItem address={address} key={index}/>
-            </>
+            </Grid>
           ))):(
             <Grid item m={1}>
               <Typography variant="h6" className="phrase">No CFTs</Typography>

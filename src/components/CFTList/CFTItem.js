@@ -1,4 +1,6 @@
 import React from 'react';
+// components
+import DeliveryPeriod from './DeliveryPeriod';
 import {
     BrowserRouter as Router,
     Link,
@@ -27,6 +29,20 @@ export default function CFTItem({address}) {
   const [product, setProduct] = React.useState();
   const [closingTime, setClosingTime] = React.useState();
   const [now, setNow] = React.useState();
+  const [open ,setOpen] = React.useState(false);
+  const [ dps , setDPs ] = React.useState([]);
+
+  const handleOpen = () => {
+    
+    defineDP();
+    setOpen(true);
+  }
+
+  const handleClose = () => {
+
+    setOpen(false);
+  }
+
 
   React.useEffect(() => {
     load();
@@ -56,13 +72,28 @@ export default function CFTItem({address}) {
 
   }
 
+  const defineDP = () => {
+    let definedDps = [];
+    for (var i = parseInt(cftDetails[3]); i <= parseInt(cftDetails[4]) ; i+=60000){
+      const date = new Date(i);
+      const minutes = date.getMinutes();
+      if ( minutes % 5 === 0){
+        definedDps.push(i);
+      }
+    }
+    setDPs(definedDps);
+  }
+
   return (
 
     closingTime > now ? (<Card sx={{ minWidth: 275 }} elevation={0} style={{borderRadius: 10}}>
     <CardContent>
       {/*<Timer closingTime={closingTime} />*/}
       <Typography className="cftItem-text" sx={{ mb: 1.5 }}>
-        CFT Block address {address}
+        CFT Block address <a href={`https://app.tryethernal.com/address/${address}`} target="_blank" rel="noreferrer">{address}</a>
+      </Typography>
+      <Typography className="cftItem-text" sx={{ mb: 1.5 }}>
+        Owner address <a href={`https://app.tryethernal.com/address/${cftDetails[0]}`} target="_blank" rel="noreferrer">{cftDetails[0]}</a>
       </Typography>
       <Typography className="cftItem-text" variant="h5" component="div">
         {product}
@@ -87,11 +118,10 @@ export default function CFTItem({address}) {
           <Link className="link" to={`/createBid`} state={{address, cftDetails}}>
               <Button size="small">Submit Bid</Button>
           </Link>
-          <Link className="link" to={`/delivery_period`} state={{address, cftDetails}}>
-              <Button size="small" >View results</Button>
-          </Link>
+          <Button size="small" onClick={handleOpen}>View results</Button>
+          <DeliveryPeriod openModal={open} closeModal={handleClose} address={ address } dps={ dps }/>
     </CardActions>
-  </Card>):(<></>)
+  </Card>):(<Grid></Grid>)
 
   );
 }

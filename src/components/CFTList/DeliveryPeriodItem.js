@@ -4,7 +4,7 @@ import ActivationRequestList from './ActivationRequestList/ActivationRequestList
 import MeritOrderList from './MeritOrderList/MeritOrderList';
 import ActivationOrders from './ActivationOrders/ActivationOrders';
 // @MUI
-import {Grid, Dialog, DialogTitle, DialogContent, DialogActions, Button} from '@mui/material';
+import {Grid, Dialog, DialogTitle, DialogContent, DialogActions, Button , Stack , Typography} from '@mui/material';
 // style
 import '../../App.css';
 import PropTypes from "prop-types";
@@ -13,32 +13,35 @@ DeliveryPeriodItem.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.any,
     latestDP : PropTypes.string,
-    ARL : PropTypes.array,
-    MOL : PropTypes.array,
-    AO : PropTypes.array,
+    ARLAddr : PropTypes.array,
+    MOLAddr : PropTypes.array,
+    AOAddr : PropTypes.array,
   };
 
-export default function DeliveryPeriodItem({open , closeModal , latestDP,  ARL , MOL , AO}){
+export default function DeliveryPeriodItem({open , closeModal , latestDP,  ARLAddr , MOLAddr, AOAddr}){
 
     return (
     <Dialog
     open={open}
-    onClose={closeModal}>
+    onClose={closeModal} >
         <DialogTitle id="responsive-dialog-title" className="cftItem-text">
-            Delivery period {latestDP}
+            Delivery period <a href={`https://app.tryethernal.com/address/${latestDP}`} target="_blank" rel="noreferrer">{latestDP}</a>
         </DialogTitle>
         <DialogContent>
-            <Grid container direction="row"
+            <Grid container direction="column"
                 justifyContent="space-between"
-                alignItems="center">
-                <Grid item>
-                <ActivationRequestList ARL={ARL}/>
+                alignItems="center" >
+                <Grid item mb={3}>
+                    <Typography className="cftItem-text">Activation Requests List</Typography>
+                    <ActivationRequestList ARLAddr={ARLAddr}/>
                 </Grid>
-                <Grid item>
-                    <MeritOrderList MOL={MOL} />
+                <Grid item  mb={3}>
+                    <Typography className="cftItem-text">Merit Order List</Typography>
+                    <MeritOrderList MOLAddr={MOLAddr} />
                 </Grid>
-                <Grid item>
-                    <ActivationOrders AO={AO} />
+                <Grid item  mb={3}>
+                    <Typography className="cftItem-text">Activation Orders List</Typography>
+                    <ActivationOrders AOAddr={AOAddr} />
                 </Grid>
             </Grid>
         </DialogContent>
