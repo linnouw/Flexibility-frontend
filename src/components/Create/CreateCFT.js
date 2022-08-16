@@ -13,6 +13,8 @@ import {
   InputAdornment,
 } from "@mui/material";
 import PublishIcon from "@mui/icons-material/Publish";
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
+// @react-router
 import { useNavigate } from "react-router-dom";
 // style
 import "../../App.css";
@@ -27,8 +29,7 @@ import Web3Context from "../../Web3Context";
 export default function CreateCFT() {
   const navigate = useNavigate();
   const context = React.useContext(Web3Context);
-  const { active, account, library, activate, deactivate } = useWeb3React();
-  const { projectUrl, productsAddresses } = context;
+  const { projectUrl, productsAddresses, setCFTAddresses } = context;
   const [powerNeeded, setPowerNeeded] = React.useState(null);
   const [openingDate, setOpeningDate] = React.useState(null);
   const [closingDate, setClosingDate] = React.useState(null);
@@ -39,14 +40,27 @@ export default function CreateCFT() {
     navigate('/cftList');
   }
 
-  async function connect() {
-    try {
-      await activate(injected);
-    } catch (ex) {
-      console.log(ex);
-    }
-  }
+  const [haveMetamask, sethaveMetamask] = React.useState(true);
+  const [accountAddress, setAccountAddress] = React.useState('');
+  const [isConnected, setIsConnected] = React.useState(false);
 
+  const { ethereum } = window;
+
+  const connectWallet = async () => {
+    try {
+      if (!ethereum) {
+        sethaveMetamask(false);
+      }
+      const accounts = await ethereum.request({
+        method: 'eth_requestAccounts',
+      });
+      setAccountAddress(accounts[0]);
+      setIsConnected(true);
+    } catch (error) {
+      setIsConnected(false);
+    }
+  };
+    
   const setProduct = (value) => {
     
     if (value === "mFRR") 
@@ -69,31 +83,35 @@ export default function CreateCFT() {
 
     const gas = await FlexibilityList.methods
       .createCFT(
-        account,
+        accountAddress,
         setProduct(value),
         powerNeeded,
         openingDate,
         closingDate,
         localization
       )
-      .estimateGas({ from: account });
+      .estimateGas({ from: accountAddress });
 
     const gasPrice = await web3.eth.getGasPrice();
 
     const tx = await FlexibilityList.methods
       .createCFT(
-        account,
+        accountAddress,
         setProduct(value),
         powerNeeded,
         openingDate,
         closingDate,
         localization
       )
-      .send({ from: account, gas, gasPrice })
-      .then((response) => alert("successfully added"))
+      .send({ from: accountAddress, gas, gasPrice })
+      .then((response) => {
+        alert("successfully added");
+        setCFTAddresses([]);
+        navigateToCftList();
+      })
       .catch((err) => alert(err));
+    
 
-      navigateToCftList();
   };
 
   return (
@@ -116,7 +134,7 @@ export default function CreateCFT() {
               Open a call for tenders
             </Typography>
           </Grid>
-          {active ? (
+          {isConnected ? (
             <Grid
               item
               container
@@ -139,7 +157,7 @@ export default function CreateCFT() {
                   <TextField
                     type="text"
                     sx={{ m: 1, minWidth: 250 }}
-                    value={account}
+                    value={accountAddress}
                     disabled
                   />
                 </Grid>
@@ -185,24 +203,22 @@ export default function CreateCFT() {
                 <Grid item p={1}>
                   <Typography className="label">Opening date:</Typography>
                   <TextField
-                    type="date"
-                    sx={{ m: 1, minWidth: 200 }}
+                    type="datetime-local"
+                    sx={{ m: 1, minWidth: 250 }}
                     onChange={(e) =>
                       setOpeningDate(epoch(e.target.value))
                     }
                   />
-                  <TextField type="time" sx={{ m: 1, minWidth: 50 }} />
                 </Grid>
                 <Grid item p={1}>
                   <Typography className="label">Closing date:</Typography>
                   <TextField
-                    type="date"
-                    sx={{ m: 1, minWidth: 200 }}
+                    type="datetime-local"
+                    sx={{ m: 1, minWidth: 250 }}
                     onChange={(e) =>
                       setClosingDate(epoch(e.target.value))
                     }
                   />
-                  <TextField type="time" sx={{ m: 1, minWidth: 50 }} />
                 </Grid>
                 <Grid item p={1}>
                   <Typography className="label">
@@ -241,7 +257,10 @@ export default function CreateCFT() {
               justifyContent="space-around"
               alignItems="center"
             >
-              <Button onClick={connect}>Connect</Button>
+                <Button variant="contained" onClick={connectWallet}>
+                  <AccountBalanceWalletOutlinedIcon/>
+                  Connect
+                </Button>
             </Grid>
           )}
         </Grid>

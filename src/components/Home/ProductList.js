@@ -20,9 +20,9 @@ export default function ProductList() {
       <Typography className="product-list-title">Product Items</Typography>
       {productsAddresses &&
         productsAddresses.map((address, index) => (
-          <>
+          <Grid key={index}>
             <ProductListItem address={address} key={index}/>
-          </>
+          </Grid>
         ))}
       <Grid
         container

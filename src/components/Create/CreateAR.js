@@ -12,12 +12,14 @@ import {
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
+// @react-router
 import { Link, useNavigate, useLocation} from "react-router-dom";
 // style
 import "../../App.css";
 //web3
 import Web3 from "web3/dist/web3.min.js";
-import CFT_contract from "../../abi/FlexibilityList.json";
+import CFT_contract from "../../abi/CFT.json";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "../../wallet/Connect";
 //useContext
@@ -29,26 +31,39 @@ CreateAR.propTypes = {
   cftDetails: PropTypes.array,
   };
 
-export default function CreateAR({address, cftDetails}) {
+export default function CreateAR() {
   const navigate = useNavigate();
   const data = useLocation();
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
-  const { active, account, library, activate, deactivate } = useWeb3React();
   const [quantity, setQuantity] = React.useState(null);
   const [startOfDelivery, setStartOfDelivery] = React.useState(null);
+
   const navigateToCftList = () => {
     navigate('/cftList');
   }
 
-  async function connect() {
-    try {
-      await activate(injected);
-    } catch (ex) {
-      console.log(ex);
-    }
-  }
+  const [haveMetamask, sethaveMetamask] = React.useState(true);
+  const [accountAddress, setAccountAddress] = React.useState('');
+  const [isConnected, setIsConnected] = React.useState(false);
 
+  const { ethereum } = window;
+
+  const connectWallet = async () => {
+    try {
+      if (!ethereum) {
+        sethaveMetamask(false);
+      }
+      const accounts = await ethereum.request({
+        method: 'eth_requestAccounts',
+      });
+      setAccountAddress(accounts[0]);
+      setIsConnected(true);
+    } catch (error) {
+      setIsConnected(false);
+    }
+  };
+    
   const epoch = (date) => {
     return Date.parse(date);
   };
@@ -63,17 +78,17 @@ export default function CreateAR({address, cftDetails}) {
     );
 
     const gas = await CFT.methods
-      .createActivationRequest(account, quantity, startOfDelivery)
-      .estimateGas({ from: account });
+      .createActivationRequest(accountAddress, quantity, startOfDelivery)
+      .estimateGas({ from: accountAddress });
 
     const gasPrice = await web3.eth.getGasPrice();
 
     const tx = await CFT.methods
-      .createActivationRequest(account, quantity, startOfDelivery)
-      .send({ from: account, gas, gasPrice })
-      .then((response) => alert("successfully added"))
+      .createActivationRequest(accountAddress, quantity, startOfDelivery)
+      .send({ from: accountAddress, gas, gasPrice })
+      .then((response) => {alert("successfully added");
+      navigateToCftList();})
       .catch((err) => alert(err));
-      navigateToCftList();
   };
 
   return (
@@ -111,7 +126,7 @@ export default function CreateAR({address, cftDetails}) {
               Submit an activation request
             </Typography>
           </Grid>
-          {active ? (<Grid
+          {isConnected ? (<Grid
             item
             container
             direction="row"
@@ -133,14 +148,14 @@ export default function CreateAR({address, cftDetails}) {
                 <TextField
                   type="text"
                   sx={{ m: 1, minWidth: 250 }}
-                  value={account}
+                  value={accountAddress}
                   disabled
                 />
               </Grid>
               <Grid item p={1}>
                 <Typography className="label">Start of delivery:</Typography>
                 <TextField
-                  type="date"
+                  type="datetime-local"
                   sx={{ m: 1, minWidth: 250 }}
                   onChange={(e) => setStartOfDelivery(epoch(e.target.value))}
                 />
@@ -204,7 +219,10 @@ export default function CreateAR({address, cftDetails}) {
               justifyContent="space-around"
               alignItems="center"
             >
-              <Button onClick={connect}>Connect</Button>
+              <Button variant="contained" onClick={connectWallet}>
+                <AccountBalanceWalletOutlinedIcon/>
+                Connect
+              </Button>
             </Grid>)}
         </Grid>
       </Paper>

@@ -14,14 +14,14 @@ import {
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
+// @react-router
 import { Link, useNavigate, useLocation} from "react-router-dom";
 // style
 import "../../App.css";
 //web3
 import Web3 from "web3/dist/web3.min.js";
-import CFT_contract from "../../abi/FlexibilityList.json";
-import { useWeb3React } from "@web3-react/core";
-import { injected } from "../../wallet/Connect";
+import CFT_contract from "../../abi/CFT.json";
 //useContext
 import Web3Context from "../../Web3Context";
 import PropTypes from "prop-types";
@@ -31,12 +31,11 @@ CreateBid.propTypes = {
   cftDetails: PropTypes.array,
   };
 
-export default function CreateBid({address, cftDetails}) {
+export default function CreateBid() {
   const navigate = useNavigate();
   const data = useLocation();
   const context = React.useContext(Web3Context);
   const { projectUrl } = context;
-  const { active, account, library, activate, deactivate } = useWeb3React();
   const [serviceProvider, setServiceProvider] = React.useState(null);
   const [price, setPrice] = React.useState(null);
   const [quantity, setQuantity] = React.useState(null);
@@ -47,14 +46,27 @@ export default function CreateBid({address, cftDetails}) {
     navigate('/cftList');
   }
 
-  async function connect() {
-    try {
-      await activate(injected);
-    } catch (ex) {
-      console.log(ex);
-    }
-  }
+  const [haveMetamask, sethaveMetamask] = React.useState(true);
+  const [accountAddress, setAccountAddress] = React.useState('');
+  const [isConnected, setIsConnected] = React.useState(false);
 
+  const { ethereum } = window;
+
+  const connectWallet = async () => {
+    try {
+      if (!ethereum) {
+        sethaveMetamask(false);
+      }
+      const accounts = await ethereum.request({
+        method: 'eth_requestAccounts',
+      });
+      setAccountAddress(accounts[0]);
+      setIsConnected(true);
+    } catch (error) {
+      setIsConnected(false);
+    }
+  };
+  
   const epoch = (date) => {
     return Date.parse(date);
   };
@@ -74,28 +86,29 @@ export default function CreateBid({address, cftDetails}) {
 
     const gas = await CFT.methods
       .createBid(
-        account,
+        accountAddress,
         serviceProvider,
         price,
         quantity,
         localization,
         startOfDelivery
       )
-      .estimateGas({ from: account });
+      .estimateGas({ from: accountAddress });
 
     const gasPrice = await web3.eth.getGasPrice();
 
     const tx = await CFT.methods
       .createBid(
-        account,
+        accountAddress,
         serviceProvider,
         price,
         quantity,
         localization,
         startOfDelivery
       )
-      .send({ from: account, gas, gasPrice })
-      .then((response) => alert("successfully added"))
+      .send({ from: accountAddress, gas, gasPrice })
+      .then((response) => {alert("successfully added"); 
+      navigateToCftList();})
       .catch((err) => alert(err));
       navigateToCftList();
   };
@@ -136,7 +149,7 @@ export default function CreateBid({address, cftDetails}) {
               Submit a bid
             </Typography>
           </Grid>
-          {active ? (<Grid
+          {isConnected ? (<Grid
             item
             container
             direction="row"
@@ -158,7 +171,7 @@ export default function CreateBid({address, cftDetails}) {
                 <TextField
                   type="text"
                   sx={{ m: 1, minWidth: 250 }}
-                  value={account}
+                  value={accountAddress}
                   disabled
                 />
               </Grid>
@@ -220,22 +233,13 @@ export default function CreateBid({address, cftDetails}) {
               <Grid item p={1}>
                 <Typography className="label">Start of delivery:</Typography>
                 <TextField
-                  type="date"
+                  type="datetime-local"
                   sx={{ m: 1, minWidth: 250 }}
                   onChange={(e) => setStartOfDelivery(epoch(e.target.value))}
                 />
               </Grid>
             </Grid>
-          </Grid>):(<Grid
-              item
-              container
-              direction="row"
-              justifyContent="space-around"
-              alignItems="center"
-            >
-              <Button onClick={connect}>Connect</Button>
-            </Grid>)}
-          <Grid
+            <Grid
             p={1}
             item
             container
@@ -248,6 +252,19 @@ export default function CreateBid({address, cftDetails}) {
                 Submit
               </Button>
           </Grid>
+          </Grid>):(<Grid
+              item
+              container
+              direction="row"
+              justifyContent="space-around"
+              alignItems="center"
+            >
+              
+              <Button variant="contained" onClick={connectWallet}>
+                <AccountBalanceWalletOutlinedIcon/>
+                Connect
+              </Button>
+            </Grid>)}
         </Grid>
       </Paper>
     </Grid>
