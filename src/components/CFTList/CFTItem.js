@@ -86,7 +86,7 @@ export default function CFTItem({address}) {
 
   return (
 
-    closingTime > now ? (<Card sx={{ minWidth: 275 }} elevation={0} style={{borderRadius: 10}}>
+    <Card sx={{ minWidth: 275 }} elevation={0} style={{borderRadius: 10}}>
     <CardContent>
       {/*<Timer closingTime={closingTime} />*/}
       <Typography className="cftItem-text" sx={{ mb: 1.5 }}>
@@ -112,16 +112,24 @@ export default function CFTItem({address}) {
       </Typography>
     </CardContent>
     <CardActions>
-          <Link className="link" to={`/createAR`} state={{address, cftDetails}}>
-              <Button size="small">Submit AR</Button>
-          </Link>
-          <Link className="link" to={`/createBid`} state={{address, cftDetails}}>
-              <Button size="small">Submit Bid</Button>
-          </Link>
+          {closingTime > now ? 
+          (<>
+            <Link className="link" to={`/createAR`} state={{address, cftDetails}}>
+                <Button size="small">Submit AR</Button>
+            </Link>
+            <Link className="link" to={`/createBid`} state={{address, cftDetails}}>
+                <Button size="small">Submit Bid</Button>
+            </Link>
+          </>) : (
+            <>
+              <Button disabled size="small">Submit AR</Button>
+              <Button disabled size="small">Submit Bid</Button>
+            </>
+          )}
           <Button size="small" onClick={handleOpen}>View results</Button>
           <DeliveryPeriod openModal={open} closeModal={handleClose} address={ address } dps={ dps }/>
     </CardActions>
-  </Card>):(<Grid></Grid>)
+  </Card>
 
   );
 }

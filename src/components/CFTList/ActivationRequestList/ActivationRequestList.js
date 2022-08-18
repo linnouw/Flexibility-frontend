@@ -1,6 +1,4 @@
 import React from 'react';
-// component
-import ARLItem from './ARLItem';
 // @MUI
 import { Typography , Grid , TableContainer , Table , TableRow , TableCell , TableBody , TableHead , Paper , Button} from '@mui/material';
 // style
@@ -55,7 +53,7 @@ export default function ARL(ARLAddr) {
         <Grid>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 500}} aria-label="simple table">
-                    <Button onClick={() => console.log(rows)}>click</Button>
+                    <Button onClick={() => console.log(ARLAddr)}>click</Button>
                     <TableHead>
                     <TableRow>
                         <TableCell>Address</TableCell>

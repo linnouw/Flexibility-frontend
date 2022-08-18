@@ -14,7 +14,6 @@ import FlexibilityDP_contract from "../../abi/FlexibilityDP.json";
 //useContext
 import Web3Context from "../../Web3Context";
 import PropTypes from "prop-types";
-import AO from './ActivationOrders/ActivationOrders';
 
 DeliveryPeriod.propTypes = {
   address: PropTypes.string,
@@ -46,8 +45,8 @@ export default function DeliveryPeriod({ openModal , closeModal , address , dps 
 
   const load = async(date) => {
     
-    const start_dp = date-DP_DURATION;
-    const end_dp = date-GCT;
+    const start_dp = date;
+    const end_dp = date + DP_DURATION;
 
     const web3 = new Web3(new Web3.providers.HttpProvider(projectUrl));
     const networkId = await web3.eth.net.getId();
@@ -59,12 +58,13 @@ export default function DeliveryPeriod({ openModal , closeModal , address , dps 
     const gasPrice = await web3.eth.getGasPrice();
     const gas_setCurrentARL = await CFT.methods.setCurrentARL( start_dp , end_dp ).estimateGas();
     const gas_setCurrentMOL = await CFT.methods.setCurrentMOL( start_dp , end_dp ).estimateGas();
+    const gas_filter = await CFT.methods.filter().estimateGas();
+    const gas_createDP = await CFT.methods.createFlexibilityDP().estimateGas();
 
     const tx_arl = await CFT.methods.setCurrentARL( start_dp , end_dp ).send({ from: accounts[0] , gas : gas_setCurrentARL , gasPrice : gasPrice })
       .then(( resp ) => console.log(resp))
       .catch(( err ) => console.log(err));
     
-    const gas_filter = await CFT.methods.filter().estimateGas();
     const tx_filter = await CFT.methods.filter().send({ from: accounts[0] , gas : gas_filter , gasPrice : gasPrice })
     .then(( resp ) => console.log(resp))
     .catch(( err ) => console.log(err));
@@ -73,7 +73,6 @@ export default function DeliveryPeriod({ openModal , closeModal , address , dps 
       .then(( resp ) => console.log(resp))
       .catch(( err ) => console.log(err));
 
-    const gas_createDP = await CFT.methods.createFlexibilityDP().estimateGas();
     const tx_dp = await CFT.methods.createFlexibilityDP().send({ from: accounts[0] , gas : gas_createDP , gasPrice : gasPrice })
       .then(( resp ) => console.log(resp))
       .catch(( err ) => console.log(err));

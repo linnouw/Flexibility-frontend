@@ -1,6 +1,4 @@
 import React from 'react';
-// component
-import MOLItem from './MOLItem';
 // @MUI
 import { Grid, TableContainer , Table , TableRow , TableCell , TableBody , TableHead, Paper } from '@mui/material';
 // style

@@ -5,5 +5,5 @@
 3- Create a folder and name it "abi" under /src in this repository. <br />
 4- Copy/Paste json files in /build/contracts of Flexibility-backend project under /src/abi of this project. <br />
 5- run `npm install` <br />
-6- run `npm start` <br />
+6- run `npm start` 
 
