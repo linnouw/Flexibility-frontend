@@ -58,12 +58,12 @@ export default function DeliveryPeriod({ openModal , closeModal , address , dps 
     const gasPrice = await web3.eth.getGasPrice();
     const gas_setCurrentARL = await CFT.methods.setCurrentARL( start_dp , end_dp ).estimateGas();
     const gas_setCurrentMOL = await CFT.methods.setCurrentMOL( start_dp , end_dp ).estimateGas();
-    const gas_filter = await CFT.methods.filter().estimateGas();
-    const gas_createDP = await CFT.methods.createFlexibilityDP().estimateGas();
 
     const tx_arl = await CFT.methods.setCurrentARL( start_dp , end_dp ).send({ from: accounts[0] , gas : gas_setCurrentARL , gasPrice : gasPrice })
       .then(( resp ) => console.log(resp))
       .catch(( err ) => console.log(err));
+
+    const gas_filter = await CFT.methods.filter().estimateGas();
     
     const tx_filter = await CFT.methods.filter().send({ from: accounts[0] , gas : gas_filter , gasPrice : gasPrice })
     .then(( resp ) => console.log(resp))
@@ -73,9 +73,17 @@ export default function DeliveryPeriod({ openModal , closeModal , address , dps 
       .then(( resp ) => console.log(resp))
       .catch(( err ) => console.log(err));
 
+    const arl = await CFT.methods.getARL().call();
+    setARL(arl);
+    const mol = await CFT.methods.getMOL().call();
+    setMOL(mol);
+    
+    const gas_createDP = await CFT.methods.createFlexibilityDP().estimateGas();
+
     const tx_dp = await CFT.methods.createFlexibilityDP().send({ from: accounts[0] , gas : gas_createDP , gasPrice : gasPrice })
       .then(( resp ) => console.log(resp))
       .catch(( err ) => console.log(err));
+
     const dp = await CFT.methods.getLatestDP().call();
     setLatestDP(dp);
     
@@ -90,10 +98,6 @@ export default function DeliveryPeriod({ openModal , closeModal , address , dps 
       FlexibilityDP_contract.abi,
       latestDP
     );
-    const arl = await DP.methods.getARL().call();
-    setARL(arl);
-    const mol = await DP.methods.getMOL().call();
-    setMOL(mol);
     const gas_dispatch = await DP.methods.dispatch().estimateGas();
     const gasPrice = await web3.eth.getGasPrice();
     const tx = await DP.methods.dispatch().send({from : accounts[0] , gas : gas_dispatch , gasPrice : gasPrice})

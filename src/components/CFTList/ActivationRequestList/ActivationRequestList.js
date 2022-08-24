@@ -29,8 +29,7 @@ export default function ARL(ARLAddr) {
         );
         const owner = await ARL.methods.getOwner().call();
         const quantity = await ARL.methods.getQuantity().call();
-        const stat = await ARL.methods.getStatus().call();
-        return [address , owner , quantity , stat];
+        return [address , owner , quantity ];
 
     }
 
@@ -53,24 +52,22 @@ export default function ARL(ARLAddr) {
         <Grid>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 500}} aria-label="simple table">
-                    <Button onClick={() => console.log(ARLAddr)}>click</Button>
+
                     <TableHead>
                     <TableRow>
                         <TableCell>Address</TableCell>
                         <TableCell align="right">Owner</TableCell>
                         <TableCell align="right">Quantity</TableCell>
-                        <TableCell align="right">Status</TableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.length !== 0 && rows && rows.map((row, index) => {
+                        {rows.length !== 0 && rows && rows.map((row, index) => 
                             <TableRow  key={index}>
                             <TableCell scope = "row" component="th"><a href={`https://app.tryethernal.com/address/${row[0]}`} target="_blank" rel="noreferrer">{row[0]}</a></TableCell>
-                            <TableCell><a href={`https://app.tryethernal.com/address/${row[1]}`} target="_blank" rel="noreferrer">{row[1]}</a></TableCell>
-                            <TableCell>{row[2]}</TableCell>
-                            <TableCell>{row[3]}</TableCell>
+                            <TableCell align="right"><a href={`https://app.tryethernal.com/address/${row[1]}`} target="_blank" rel="noreferrer">{row[1]}</a></TableCell>
+                            <TableCell align="right">{row[2]}</TableCell>
                         </TableRow>
-                        })}
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>

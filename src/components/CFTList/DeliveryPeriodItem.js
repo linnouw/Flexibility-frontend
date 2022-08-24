@@ -4,7 +4,7 @@ import ActivationRequestList from './ActivationRequestList/ActivationRequestList
 import MeritOrderList from './MeritOrderList/MeritOrderList';
 import ActivationOrders from './ActivationOrders/ActivationOrders';
 // @MUI
-import {Grid, Dialog, DialogTitle, DialogContent, DialogActions, Button , Stack , Typography} from '@mui/material';
+import {Grid, Dialog, DialogTitle, DialogContent, DialogActions, Button , Typography} from '@mui/material';
 // style
 import '../../App.css';
 import PropTypes from "prop-types";
@@ -22,15 +22,21 @@ export default function DeliveryPeriodItem({open , closeModal , latestDP,  ARLAd
 
     return (
     <Dialog
+    PaperProps={{
+    sx: {
+      width: "60%",
+      maxWidth: "100vw!important",
+    },
+  }}
     open={open}
     onClose={closeModal} >
         <DialogTitle id="responsive-dialog-title" className="cftItem-text">
-            Delivery period <a href={`https://app.tryethernal.com/address/${latestDP}`} target="_blank" rel="noreferrer">{latestDP}</a>
+            Delivery period <a href={`https://app.tryethernal.com/address/${latestDP}`} target="_blank" rel="noreferrer">{latestDP}</a>*
         </DialogTitle>
         <DialogContent>
             <Grid container direction="column"
                 justifyContent="space-between"
-                alignItems="center" >
+                alignItems="flex-start" >
                 <Grid item mb={3}>
                     <Typography className="cftItem-text">Activation Requests List</Typography>
                     <ActivationRequestList ARLAddr={ARLAddr}/>

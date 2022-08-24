@@ -60,7 +60,7 @@ export default function MOL(MOLAddr) {
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                    {rows.length !== 0 && rows && rows.map((row, index) => {
+                    {rows.length !== 0 && rows && rows.map((row, index) => 
                         <TableRow
                         key={index}
                         >
@@ -71,7 +71,7 @@ export default function MOL(MOLAddr) {
                             <TableCell align="right">{row[2]}</TableCell>
                         </TableRow>
                         
-                    })}
+                    )}
                     </TableBody>
                 </Table>
             </TableContainer>
